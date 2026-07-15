@@ -155,6 +155,11 @@ public class GameSession {
         return Math.max(0, durationTicks - tick);
     }
 
+    /** Get elapsed ticks since session started (useful for gamemodes like Gem Grab). */
+    public int getElapsedTicks() {
+        return tick;
+    }
+
     public void setObjectiveData(String key, Object value) {
         objectiveData.put(key, value);
     }

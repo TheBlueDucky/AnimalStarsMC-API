@@ -103,6 +103,10 @@ public class PlayerStats {
         return (double) wins / totalGames * 100;
     }
 
+    public int getGamesPlayed() {
+        return wins + losses;
+    }
+
     public void serialize(ConfigurationSection section) {
         section.set("name", playerName);
         section.set("kills", kills);

@@ -221,6 +221,12 @@ public class GameManager {
         return new ArrayList<>(sessions.values());
     }
 
+    public int getElapsedTicks(String sessionId) {
+        GameSession session = sessions.get(sessionId);
+        if (session == null) return -1;
+        return session.getElapsedTicks();
+    }
+
     public void clearAll() {
         for (BukkitTask task : sessionTasks.values()) {
             if (task != null) task.cancel();

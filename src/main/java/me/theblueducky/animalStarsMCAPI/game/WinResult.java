@@ -33,6 +33,14 @@ public class WinResult {
         return new WinResult(null, null, reason);
     }
 
+    public boolean isDraw() {
+        return !hasTeamWinner() && winningPlayer == null;
+    }
+
+    public boolean hasPlayerWinner() {
+        return winningPlayer != null;
+    }
+
     public Team getWinningTeam() {
         return winningTeam;
     }

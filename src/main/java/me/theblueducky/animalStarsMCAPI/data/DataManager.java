@@ -101,4 +101,9 @@ public class DataManager {
     public Map<String, GameArena> reload() {
         return loadArenas();
     }
+
+    /** Reload player stats from file. */
+    public Map<UUID, PlayerStats> reloadPlayerStats() {
+        return loadPlayerStats();
+    }
 }

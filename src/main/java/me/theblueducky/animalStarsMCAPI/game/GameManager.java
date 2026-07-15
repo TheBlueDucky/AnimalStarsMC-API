@@ -230,33 +230,4 @@ public class GameManager {
         playerSession.clear();
         TeamManager.getInstance().clearAll();
     }
-
-    /** Reload arenas from DataManager. */
-    public void reload() {
-        arenas.clear();
-        for (Map.Entry<String, GameArena> entry : DataManager.getInstance().loadArenas().entrySet()) {
-            arenas.put(entry.getKey().toLowerCase(), entry.getValue());
-        }
-    }
-
-    /** End a session with a draw result. */
-    public void draw(GameSession session) {
-        if (session == null || session.getState() == GameState.ENDED) return;
-        session.setState(GameState.ENDING);
-        session.getGamemode().onEnd(session, WinResult.playerWin(null, "draw"));
-
-        BukkitTask task = sessionTasks.remove(session.getId());
-        if (task != null) task.cancel();
-
-        List<Player> players = session.getPlayers();
-        Bukkit.getPluginManager().callEvent(
-                new GameEndEvent(session.getGamemode().getId(), null, null, players));
-
-        session.setState(GameState.ENDED);
-        TeamManager.getInstance().removeSession(session.getId());
-        for (Player p : players) {
-            playerSession.remove(p.getUniqueId());
-        }
-        sessions.remove(session.getId());
-    }
 }

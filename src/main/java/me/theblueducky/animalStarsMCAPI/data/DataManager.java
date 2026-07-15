@@ -96,4 +96,9 @@ public class DataManager {
         }
         return result;
     }
+
+    /** Reload arenas from file (useful for hot-reloading arena configs). */
+    public Map<String, GameArena> reload() {
+        return loadArenas();
+    }
 }

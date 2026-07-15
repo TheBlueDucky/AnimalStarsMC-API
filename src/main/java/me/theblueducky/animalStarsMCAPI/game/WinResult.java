@@ -29,6 +29,10 @@ public class WinResult {
         return new WinResult(null, player, reason);
     }
 
+    public static WinResult draw(String reason) {
+        return new WinResult(null, null, reason);
+    }
+
     public Team getWinningTeam() {
         return winningTeam;
     }

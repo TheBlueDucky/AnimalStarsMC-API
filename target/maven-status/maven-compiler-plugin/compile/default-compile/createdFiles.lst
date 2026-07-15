@@ -1,0 +1,11 @@
+me\theblueducky\animalStarsMCAPI\event\GameEndEvent.class
+me\theblueducky\animalStarsMCAPI\game\GameArena.class
+me\theblueducky\animalStarsMCAPI\game\GameManager.class
+me\theblueducky\animalStarsMCAPI\utils\ItemBuilder.class
+me\theblueducky\animalStarsMCAPI\player\PlayerManager.class
+me\theblueducky\animalStarsMCAPI\AnimalStarsMCAPI.class
+me\theblueducky\animalStarsMCAPI\utils\Messages.class
+me\theblueducky\animalStarsMCAPI\event\PlayerKillEvent.class
+me\theblueducky\animalStarsMCAPI\player\PlayerStats.class
+me\theblueducky\animalStarsMCAPI\event\GameStartEvent.class
+me\theblueducky\animalStarsMCAPI\game\GameState.class

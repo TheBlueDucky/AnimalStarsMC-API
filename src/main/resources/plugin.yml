@@ -2,3 +2,4 @@ name: AnimalStarsMC-API
 version: '1.0'
 main: me.theblueducky.animalStarsMCAPI.AnimalStarsMCAPI
 api-version: '1.21'
+author: TheBlueDucky

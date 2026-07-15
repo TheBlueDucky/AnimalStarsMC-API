@@ -1,5 +1,7 @@
 package me.theblueducky.animalStarsMCAPI.event;
 
+import me.theblueducky.animalStarsMCAPI.team.Team;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -9,11 +11,13 @@ public class GameEndEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private String gameMode;
     private Player winner;
+    private Team winningTeam;
     private List<Player> allPlayers;
 
-    public GameEndEvent(String gameMode, Player winner, List<Player> allPlayers) {
+    public GameEndEvent(String gameMode, Player winner, Team winningTeam, List<Player> allPlayers) {
         this.gameMode = gameMode;
         this.winner = winner;
+        this.winningTeam = winningTeam;
         this.allPlayers = allPlayers;
     }
 
@@ -23,6 +27,11 @@ public class GameEndEvent extends Event {
 
     public Player getWinner() {
         return winner;
+    }
+
+    /** Winning team for team modes, null for FFA. */
+    public Team getWinningTeam() {
+        return winningTeam;
     }
 
     public List<Player> getAllPlayers() {

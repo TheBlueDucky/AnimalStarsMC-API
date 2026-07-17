@@ -1,5 +1,6 @@
 package me.theblueducky.animalStarsMCAPI.event;
 
+import me.theblueducky.animalStarsMCAPI.game.GameSession;
 import me.theblueducky.animalStarsMCAPI.team.Team;
 
 import org.bukkit.entity.Player;
@@ -9,16 +10,18 @@ import java.util.List;
 
 public class GameEndEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-    private String gameMode;
-    private Player winner;
-    private Team winningTeam;
-    private List<Player> allPlayers;
+    private final String gameMode;
+    private final Player winner;
+    private final Team winningTeam;
+    private final List<Player> allPlayers;
+    private final GameSession session;
 
-    public GameEndEvent(String gameMode, Player winner, Team winningTeam, List<Player> allPlayers) {
+    public GameEndEvent(String gameMode, Player winner, Team winningTeam, List<Player> allPlayers, GameSession session) {
         this.gameMode = gameMode;
         this.winner = winner;
         this.winningTeam = winningTeam;
         this.allPlayers = allPlayers;
+        this.session = session;
     }
 
     public String getGameMode() {
@@ -36,6 +39,10 @@ public class GameEndEvent extends Event {
 
     public List<Player> getAllPlayers() {
         return allPlayers;
+    }
+
+    public GameSession getSession() {
+        return session;
     }
 
     @Override

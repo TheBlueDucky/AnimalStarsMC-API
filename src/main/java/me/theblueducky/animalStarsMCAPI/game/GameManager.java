@@ -127,7 +127,7 @@ public class GameManager {
         session.setState(GameState.STARTING);
         session.getGamemode().onStart(session);
         session.setState(GameState.PLAYING);
-        Bukkit.getPluginManager().callEvent(new GameStartEvent(session.getGamemode().getId()));
+        Bukkit.getPluginManager().callEvent(new GameStartEvent(session.getGamemode().getId(), session));
         startTicker(session);
     }
 
@@ -160,7 +160,7 @@ public class GameManager {
         Player winner = result.getWinningPlayer();
         List<Player> players = session.getPlayers();
         Bukkit.getPluginManager().callEvent(
-                new GameEndEvent(session.getGamemode().getId(), winner, result.getWinningTeam(), players));
+                new GameEndEvent(session.getGamemode().getId(), winner, result.getWinningTeam(), players, session));
 
         session.setState(GameState.ENDED);
         TeamManager.getInstance().removeSession(session.getId());
@@ -204,7 +204,7 @@ public class GameManager {
 
         Bukkit.getPluginManager().callEvent(new PlayerKillEvent(
                 killer, victim, session != null ? session.getGamemode().getId() : "unknown",
-                killerStats != null ? killerStats.getKills() : 0));
+                killerStats != null ? killerStats.getKills() : 0, session));
     }
 
     // ---- Lookups ----

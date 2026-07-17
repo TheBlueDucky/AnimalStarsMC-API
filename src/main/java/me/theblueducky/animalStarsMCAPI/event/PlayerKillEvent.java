@@ -1,21 +1,25 @@
 package me.theblueducky.animalStarsMCAPI.event;
 
+import me.theblueducky.animalStarsMCAPI.game.GameSession;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class PlayerKillEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-    private Player killer;
-    private Player victim;
-    private String gameMode;
-    private int killCount;
+    private final Player killer;
+    private final Player victim;
+    private final String gameMode;
+    private final int killCount;
+    private final GameSession session;
 
-    public PlayerKillEvent(Player killer, Player victim, String gameMode, int killCount) {
+    public PlayerKillEvent(Player killer, Player victim, String gameMode, int killCount, GameSession session) {
         this.killer = killer;
         this.victim = victim;
         this.gameMode = gameMode;
         this.killCount = killCount;
+        this.session = session;
     }
 
     public Player getKiller() {
@@ -32,6 +36,10 @@ public class PlayerKillEvent extends Event {
 
     public int getKillCount() {
         return killCount;
+    }
+
+    public GameSession getSession() {
+        return session;
     }
 
     @Override

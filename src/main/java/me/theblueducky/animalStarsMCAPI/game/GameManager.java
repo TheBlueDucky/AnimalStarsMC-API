@@ -2,6 +2,7 @@ package me.theblueducky.animalStarsMCAPI.game;
 
 import me.theblueducky.animalStarsMCAPI.AnimalStarsMCAPI;
 import me.theblueducky.animalStarsMCAPI.animal.Animal;
+import me.theblueducky.animalStarsMCAPI.animal.AnimalInstance;
 import me.theblueducky.animalStarsMCAPI.data.DataManager;
 import me.theblueducky.animalStarsMCAPI.event.GameEndEvent;
 import me.theblueducky.animalStarsMCAPI.event.GameStartEvent;
@@ -15,7 +16,11 @@ import me.theblueducky.animalStarsMCAPI.team.Team;
 import me.theblueducky.animalStarsMCAPI.team.TeamManager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
@@ -126,6 +131,7 @@ public class GameManager {
         if (session == null || session.getState() == GameState.PLAYING) return;
         session.setState(GameState.STARTING);
         session.getGamemode().onStart(session);
+        setupPlayers(session);
         session.setState(GameState.PLAYING);
         Bukkit.getPluginManager().callEvent(new GameStartEvent(session.getGamemode().getId(), session));
         startTicker(session);
@@ -153,6 +159,7 @@ public class GameManager {
         if (session == null || session.getState() == GameState.ENDED) return;
         session.setState(GameState.ENDING);
         session.getGamemode().onEnd(session, result);
+        cleanupPlayers(session);
 
         BukkitTask task = sessionTasks.remove(session.getId());
         if (task != null) task.cancel();
@@ -168,6 +175,69 @@ public class GameManager {
             playerSession.remove(p.getUniqueId());
         }
         sessions.remove(session.getId());
+    }
+
+    private void setupPlayers(GameSession session) {
+        GameArena arena = session.getArena();
+        for (Player player : session.getPlayers()) {
+            Team team = session.getTeamOfPlayer(player);
+            AnimalInstance instance = session.getAnimalInstance(player);
+
+            Location spawn = null;
+            if (team != null && team.getSpawn() != null) {
+                spawn = team.getSpawn();
+            } else if (arena != null && arena.getLobbySpawn() != null) {
+                spawn = arena.getLobbySpawn();
+            }
+            if (spawn != null) {
+                player.teleport(spawn);
+            }
+
+            player.setGameMode(GameMode.SURVIVAL);
+            player.getInventory().clear();
+            player.setHealth(player.getMaxHealth());
+            player.setFoodLevel(20);
+            player.setLevel(0);
+            player.setExp(0);
+            player.setFireTicks(0);
+            for (PotionEffect effect : player.getActivePotionEffects()) {
+                player.removePotionEffect(effect.getType());
+            }
+
+            if (instance != null && instance.getAnimal() != null) {
+                for (ItemStack item : instance.getAnimal().getKitItems()) {
+                    if (item != null) {
+                        player.getInventory().addItem(item);
+                    }
+                }
+            }
+        }
+    }
+
+    private void cleanupPlayers(GameSession session) {
+        GameArena arena = session.getArena();
+        for (Player player : session.getPlayers()) {
+            Location spawn = null;
+            if (arena != null && arena.getLobbySpawn() != null) {
+                spawn = arena.getLobbySpawn();
+            } else if (player.getWorld() != null) {
+                spawn = player.getWorld().getSpawnLocation();
+            }
+            if (spawn != null) {
+                player.teleport(spawn);
+            }
+
+            player.setGameMode(GameMode.SURVIVAL);
+            player.getInventory().clear();
+            player.setHealth(player.getMaxHealth());
+            player.setFoodLevel(20);
+            player.setLevel(0);
+            player.setExp(0);
+            player.setFireTicks(0);
+            for (PotionEffect effect : player.getActivePotionEffects()) {
+                player.removePotionEffect(effect.getType());
+            }
+        }
     }
 
     /** Default winner when time runs out: highest-score team (or its member for FFA). */

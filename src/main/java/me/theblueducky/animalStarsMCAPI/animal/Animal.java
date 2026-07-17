@@ -114,6 +114,13 @@ public abstract class Animal {
         return new ItemStack(icon);
     }
 
+    /** Kit items given to the player when the game starts. Override to provide a custom kit. */
+    public List<ItemStack> getKitItems() {
+        List<ItemStack> items = new ArrayList<>();
+        items.add(getIconItem());
+        return items;
+    }
+
     /** Perform the basic attack. Implemented by concrete animals. */
     public abstract void performAttack(Player user, AnimalInstance instance);
 

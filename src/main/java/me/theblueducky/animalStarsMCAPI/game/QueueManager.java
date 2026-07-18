@@ -80,6 +80,11 @@ public class QueueManager {
         if (session == null) return;
 
         List<Team> teams = session.getTeams();
+        // For FFA (teamSize == 1), create one team per player so everyone gets a unique spawn.
+        if (gamemode.getTeamSize() == 1 && participants.size() > 0) {
+            teams = TeamManager.getInstance().createTeams(session.getId(), participants.size());
+            session.setTeams(teams);
+        }
         TeamManager.getInstance().assignPlayers(session.getId(), participants, teams);
 
         for (Player p : participants) {
@@ -89,8 +94,9 @@ public class QueueManager {
         }
 
         lobbies.remove(lobby.getGamemodeId().toLowerCase());
-        GameManager.getInstance().startSession(session);
+        // Fire MatchFoundEvent BEFORE starting the session so listeners can prepare players.
         Bukkit.getPluginManager().callEvent(new MatchFoundEvent(session));
+        GameManager.getInstance().startSession(session);
     }
 
     public void clearAll() {

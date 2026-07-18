@@ -181,7 +181,6 @@ public class GameManager {
         GameArena arena = session.getArena();
         for (Player player : session.getPlayers()) {
             Team team = session.getTeamOfPlayer(player);
-            AnimalInstance instance = session.getAnimalInstance(player);
 
             Location spawn = null;
             if (team != null && team.getSpawn() != null) {
@@ -194,7 +193,6 @@ public class GameManager {
             }
 
             player.setGameMode(GameMode.SURVIVAL);
-            player.getInventory().clear();
             player.setHealth(player.getMaxHealth());
             player.setFoodLevel(20);
             player.setLevel(0);
@@ -203,14 +201,7 @@ public class GameManager {
             for (PotionEffect effect : player.getActivePotionEffects()) {
                 player.removePotionEffect(effect.getType());
             }
-
-            if (instance != null && instance.getAnimal() != null) {
-                for (ItemStack item : instance.getAnimal().getKitItems()) {
-                    if (item != null) {
-                        player.getInventory().addItem(item);
-                    }
-                }
-            }
+            // Note: inventory and kit items are handled by the core plugin via events.
         }
     }
 

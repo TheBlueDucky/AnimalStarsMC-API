@@ -183,10 +183,17 @@ public class GameManager {
             Team team = session.getTeamOfPlayer(player);
 
             Location spawn = null;
+            // Priority 1: Team spawn (set by GameSession.setTeams from arena config)
             if (team != null && team.getSpawn() != null) {
                 spawn = team.getSpawn();
-            } else if (arena != null && arena.getLobbySpawn() != null) {
+            }
+            // Priority 2: Arena lobby spawn (fallback)
+            if (spawn == null && arena != null && arena.getLobbySpawn() != null) {
                 spawn = arena.getLobbySpawn();
+            }
+            // Priority 3: World spawn (last resort)
+            if (spawn == null && player.getWorld() != null) {
+                spawn = player.getWorld().getSpawnLocation();
             }
             if (spawn != null) {
                 player.teleport(spawn);

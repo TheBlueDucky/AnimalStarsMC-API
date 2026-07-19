@@ -3,6 +3,7 @@ package me.theblueducky.animalStarsMCAPI.animal;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +120,40 @@ public abstract class Animal {
         List<ItemStack> items = new ArrayList<>();
         items.add(getIconItem());
         return items;
+    }
+
+    /** Full combat kit: animal icon + attack + super + gadget items. Used by core plugin. */
+    public List<ItemStack> getFullKit() {
+        List<ItemStack> items = new ArrayList<>();
+        // Animal icon as identifier
+        items.add(getIconItem());
+        // Combat items with animal-specific appearance
+        items.add(createKitItem(icon, "§cMain Attack", "§7Left-click to use main attack", "§8" + name));
+        items.add(createKitItem(icon, "§6Super", "§7Right-click to use super", "§8" + name));
+        items.add(createKitItem(icon, "§aGadget", "§7Drop (Q) to use gadget", "§8" + name));
+        return items;
+    }
+
+    /** Helper to create a named item for the kit. */
+    private ItemStack createKitItem(Material material, String name, String... lore) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(name);
+            if (lore.length > 0) {
+                java.util.List<String> loreList = new java.util.ArrayList<>();
+                for (String line : lore) {
+                    if (line != null && !line.isEmpty()) {
+                        loreList.add(line);
+                    }
+                }
+                if (!loreList.isEmpty()) {
+                    meta.setLore(loreList);
+                }
+            }
+            item.setItemMeta(meta);
+        }
+        return item;
     }
 
     /** Perform the basic attack. Implemented by concrete animals. */
